@@ -9,6 +9,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.Blob;
+import java.io.IOException;
 
 public class View extends JFrame
 {
@@ -139,5 +150,23 @@ public class View extends JFrame
                 }
     		}
     	}
+    	//This is the class which is called for every database connection
+    	public static Connection getConnection() {
+			Connection conn = null;
+			try
+			{
+				Class.forName("com.mysql.jdbc.Driver");
+				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bgtraining","root","");
+			}
+				catch(SQLException ex)
+					{
+						ex.printStackTrace();
+					}
+				catch(ClassNotFoundException ex)
+					{
+						ex.printStackTrace();
+					}
+			return conn;
+	}
     	
 }
