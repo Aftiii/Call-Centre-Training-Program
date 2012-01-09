@@ -9,6 +9,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.Blob;
+import java.io.IOException;
+
 
 public class JoiningGUI extends JFrame
 {
@@ -36,7 +48,7 @@ public class JoiningGUI extends JFrame
 		countyLbl, postcodeLbl, phoneLbl, emailLbl, secQuestionLbl, secAnsLbl;
 	
 	//dropdown box
-	String[] secQuestionString = {"First pet's name?", "Mother's maiden name?", "Favourite actor?"};
+	String[] secQuestionString = {"First pets name?", "Mothers maiden name?", "Favourite actor?"};
 	JComboBox secQuestionCombo;
 	
 	//buttons
@@ -231,13 +243,39 @@ public class JoiningGUI extends JFrame
 		    	String postcodeIn = postcodeText.getText();
 		    	String phoneIn = phoneText.getText();
 		    	String emailIn = emailText.getText();
+		    	String secQuestionIn = (String)secQuestionCombo.getSelectedItem();
 		    	String secAnswerIn = secAnsText.getText();
 		    	
-		        System.out.println("Customer added. Name: " + fNameIn + "  " + sNameIn + 
+		    	//Database insert
+		    	Connection connection = View.getConnection();
+				Statement st = null;
+				ResultSet rs = null;
+				
+				try
+				{
+					st = connection.createStatement();
+					String joiningSql = "INSERT INTO customer (fName,sName,houseNo,streetName,city,county,postCode,telNo,email,secQues,secAns) VALUES ('" + fNameIn + "','" + sNameIn + "','" + houseNumIn + "','" + streetNameIn +"','" + cityIn +"','" + countyIn + "','" + postcodeIn + "','" + phoneIn + "','" + emailIn + "','" + secQuestionIn + "','" + secAnswerIn + "')";
+					st.executeUpdate(joiningSql);
+
+				}
+				catch(SQLException ex)
+				{
+					ex.printStackTrace();
+				}
+				/*finally
+				{
+					if(st!=null)
+					{
+						st.close();
+					}
+				}*/
+		
+		    	
+		        /*System.out.println("Customer added. Name: " + fNameIn + "  " + sNameIn + 
 		        						" Address: " + houseNumIn + " " + streetNameIn + ", " +
 		            				   cityIn + ", " + countyIn + ", " + postcodeIn + 
 		            				   	" Contact Details: " + emailIn + ", " + phoneIn +
-		            				   		" Security Answer: " + secAnswerIn);
+		            				   		" Security Answer: " + secAnswerIn);*/
 		        //System.exit(0);
 		        
 				fNameText.setText("");
