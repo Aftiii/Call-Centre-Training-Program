@@ -33,10 +33,12 @@ public class ComplaintGUI
 	JoiningGUI jgui;
 	ProblemsGUI pbgui;
 	CustDetailsGUI cdgui;
+	ComplaintGUI cgui;
 	
 	static NavigationListener navigationListener;	
 	static FetchCustHistListener fetchCustHistListener;
 	static AddComplaintListener addComplaintListener;
+	static ComplaintFocusListener complaintFocusListener;
 	static JFrame frame;
 	static JMenuBar menuBar;
 	static JTextArea readOnlyTextArea, complaintTextArea;
@@ -52,6 +54,7 @@ public class ComplaintGUI
     	navigationListener = new NavigationListener();  
     	fetchCustHistListener = new FetchCustHistListener();
     	addComplaintListener = new AddComplaintListener();	
+    	complaintFocusListener = new ComplaintFocusListener();
     }
     
     
@@ -164,6 +167,7 @@ public class ComplaintGUI
 		//newComplButton.addActionListener(navigationListener);
 		
 		custIdTxt = new JTextField(10);
+		custIdTxt.setFont(new Font("Serif", Font.ITALIC, 16));
 		c.ipady = 20;
 		c.weightx = 1.0;
 		c.gridx = 1;
@@ -222,6 +226,7 @@ public class ComplaintGUI
 		complaintTextArea.setFont(new Font("Serif", Font.ITALIC, 16));
 		complaintTextArea.setLineWrap(true);
 		complaintTextArea.setWrapStyleWord(true);
+		complaintTextArea.addFocusListener(complaintFocusListener);
 		
 		complaintScrollPane = new JScrollPane(complaintTextArea);
 		complaintScrollPane.setVerticalScrollBarPolicy(
@@ -330,12 +335,12 @@ public class ComplaintGUI
 			Statement st = null;
 			ResultSet rs = null;
 			
-			
+			String previousHistory = "";
 			try
 			{
 				st = connection.createStatement();
-				rs = st.executeQuery("SELECT dateTime, complaint FROM complaints WHERE cust_id =" + custId + ";");
-				
+				rs = st.executeQuery("SELECT DATE_FORMAT(dateTime, '%W %D %M %Y %H:%i') AS dateTime, complaint FROM complaints WHERE cust_id =" + custId + ";");
+
 				boolean found = rs.next();
 				
 				if (!found)
@@ -344,15 +349,23 @@ public class ComplaintGUI
 				}
 				else
 				{
-					//while (found) 
-					//{
-						readOnlyTextArea.setText(rs.getString("complaint") + " " + rs.getString("dateTime"));
+					int recordCount = 0;
+					while(rs.next())
+					{
+						recordCount++;
+					}
+					rs.first();
+					for(int i = 0;i < (recordCount +1); i++)
+					{
+						previousHistory += rs.getString(1) + "\n" + rs.getString(2) + "\n\n";
 						rs.next();
-					//}
+					}
+					readOnlyTextArea.setText(previousHistory);
 				}
 			}
 			catch(SQLException ex)
 			{
+				readOnlyTextArea.setText("Please Enter Customer ID.");
 				ex.printStackTrace();
 			}
 		
@@ -366,30 +379,47 @@ public class ComplaintGUI
 			String complaintIn = complaintTextArea.getText();
 			String previousComplaint = readOnlyTextArea.getText();
 			String custId = custIdTxt.getText();
+	    	//System.out.println("Cust ID:" + custId);
 	    	
-	    	//Database insert
-	    	Connection connection = View.getConnection();
-			Statement st = null;
-			ResultSet rs = null;
-			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			Date date = new Date();
-			String dateNow = dateFormat.format(date);
-			try
-			{
-				st = connection.createStatement();
-				String complaintSql = "INSERT INTO complaints (cust_id, dateTime, complaint) VALUES (" + custId + ",'" + dateNow + "','" + complaintIn + "')"; 
-				st.executeUpdate(complaintSql);
-
-			}
-			catch(SQLException ex)
-			{
-				ex.printStackTrace();
-			}
+	    	
+		    	//Database insert
+		    	Connection connection = View.getConnection();
+				Statement st = null;
+				ResultSet rs = null;
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+				Date date = new Date();
+				String dateNow = dateFormat.format(date);
+				try
+				{
+					st = connection.createStatement();
+					String complaintSql = "INSERT INTO complaints (cust_id, dateTime, complaint) VALUES (" + custId + ",'" + dateNow + "','" + complaintIn + "')"; 
+					st.executeUpdate(complaintSql);
+					JOptionPane.showMessageDialog(null,"Complaint added!");
+				}
+				catch(SQLException ex)
+				{
+					readOnlyTextArea.setText("Please Enter Customer ID.");
+					ex.printStackTrace();
+				}
+	    	
 		}
 		
-		//complaintTextArea.setText("");
-		//readOnlyTextArea.setText("");
+	
 	}
+	
+	  class ComplaintFocusListener implements FocusListener
+     {
+     	public void focusGained(FocusEvent e)
+     	{
+			complaintTextArea.setText("");
+     	}
+        public void focusLost(FocusEvent e) 
+        {
+       		 
+    	}
+     	
+     	
+     }
 				
 }
 	     
