@@ -256,6 +256,7 @@ public class JoiningGUI extends JFrame
 					st = connection.createStatement();
 					String joiningSql = "INSERT INTO customer (fName,sName,houseNo,streetName,city,county,postCode,telNo,email,secQues,secAns) VALUES ('" + fNameIn + "','" + sNameIn + "','" + houseNumIn + "','" + streetNameIn +"','" + cityIn +"','" + countyIn + "','" + postcodeIn + "','" + phoneIn + "','" + emailIn + "','" + secQuestionIn + "','" + secAnswerIn + "')";
 					st.executeUpdate(joiningSql);
+					JOptionPane.showMessageDialog(null,"Customer added!");
 
 				}
 				catch(SQLException ex)
