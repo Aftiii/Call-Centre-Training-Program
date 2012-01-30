@@ -314,7 +314,7 @@ public class ComplaintGUI
                 }
                 if (e.getActionCommand().equals("Customer Details")) {
                     cdgui = new CustDetailsGUI();
-			    	cdgui.pack();
+			    	cdgui.createAndShowGUI();
 
                     frame.dispose();
                 }
@@ -424,4 +424,3 @@ public class ComplaintGUI
 }
 	     
      
-
