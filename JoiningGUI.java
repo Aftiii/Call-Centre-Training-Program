@@ -223,7 +223,7 @@ public class JoiningGUI extends JFrame
                 }
                 if (e.getActionCommand().equals("Customer Details")) {
                     cdgui = new CustDetailsGUI();
-			    	cdgui.pack();
+			    	cdgui.createAndShowGUI();
 
                     dispose();
                 }
@@ -246,49 +246,57 @@ public class JoiningGUI extends JFrame
 		    	String secQuestionIn = (String)secQuestionCombo.getSelectedItem();
 		    	String secAnswerIn = secAnsText.getText();
 		    	
-		    	//Database insert
-		    	Connection connection = View.getConnection();
-				Statement st = null;
-				ResultSet rs = null;
-				
-				try
-				{
-					st = connection.createStatement();
-					String joiningSql = "INSERT INTO customer (fName,sName,houseNo,streetName,city,county,postCode,telNo,email,secQues,secAns) VALUES ('" + fNameIn + "','" + sNameIn + "','" + houseNumIn + "','" + streetNameIn +"','" + cityIn +"','" + countyIn + "','" + postcodeIn + "','" + phoneIn + "','" + emailIn + "','" + secQuestionIn + "','" + secAnswerIn + "')";
-					st.executeUpdate(joiningSql);
-					JOptionPane.showMessageDialog(null,"Customer added!");
-
-				}
-				catch(SQLException ex)
-				{
-					ex.printStackTrace();
-				}
-				/*finally
-				{
-					if(st!=null)
+		    	if(("".equals(fNameIn)) || ("".equals(sNameIn))||("".equals(houseNumIn))||("".equals(streetNameIn))||("".equals(cityIn))
+		    		||("".equals(countyIn))||("".equals(postcodeIn))||("".equals(emailIn))||("".equals(secQuestionIn))||("".equals(secAnswerIn)))		    			
+		    	{
+		    		JOptionPane.showMessageDialog(null,"No blank fields allowed!");
+		    	}
+		    	else
+		    	{
+			    	//Database insert
+			    	Connection connection = View.getConnection();
+					Statement st = null;
+					ResultSet rs = null;
+					
+					try
 					{
-						st.close();
+						st = connection.createStatement();
+						String joiningSql = "INSERT INTO customer (fName,sName,houseNo,streetName,city,county,postCode,telNo,email,secQues,secAns) VALUES ('" + fNameIn + "','" + sNameIn + "','" + houseNumIn + "','" + streetNameIn +"','" + cityIn +"','" + countyIn + "','" + postcodeIn + "','" + phoneIn + "','" + emailIn + "','" + secQuestionIn + "','" + secAnswerIn + "')";
+						st.executeUpdate(joiningSql);
+						JOptionPane.showMessageDialog(null,"Customer added!");
+	
 					}
-				}*/
-		
-		    	
-		        /*System.out.println("Customer added. Name: " + fNameIn + "  " + sNameIn + 
-		        						" Address: " + houseNumIn + " " + streetNameIn + ", " +
-		            				   cityIn + ", " + countyIn + ", " + postcodeIn + 
-		            				   	" Contact Details: " + emailIn + ", " + phoneIn +
-		            				   		" Security Answer: " + secAnswerIn);*/
-		        //System.exit(0);
-		        
-				fNameText.setText("");
-		    	sNameText.setText("");
-		    	houseNumberText.setText("");
-		    	streetNameText.setText("");
-		    	cityText.setText("");
-		    	countyText.setText("");
-		    	postcodeText.setText("");
-		    	phoneText.setText("");
-		    	emailText.setText("");
-		    	secAnsText.setText("");
+					catch(SQLException ex)
+					{
+						ex.printStackTrace();
+					}
+					/*finally
+					{
+						if(st!=null)
+						{
+							st.close();
+						}
+					}*/
+			
+			    	
+			        /*System.out.println("Customer added. Name: " + fNameIn + "  " + sNameIn + 
+			        						" Address: " + houseNumIn + " " + streetNameIn + ", " +
+			            				   cityIn + ", " + countyIn + ", " + postcodeIn + 
+			            				   	" Contact Details: " + emailIn + ", " + phoneIn +
+			            				   		" Security Answer: " + secAnswerIn);*/
+			        //System.exit(0);
+			        
+					fNameText.setText("");
+			    	sNameText.setText("");
+			    	houseNumberText.setText("");
+			    	streetNameText.setText("");
+			    	cityText.setText("");
+			    	countyText.setText("");
+			    	postcodeText.setText("");
+			    	phoneText.setText("");
+			    	emailText.setText("");
+			    	secAnsText.setText("");
+		    	}
     		}
     	}
     	
