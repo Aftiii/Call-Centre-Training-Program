@@ -50,10 +50,22 @@ CustDetailsGUI cdgui;
 
     public View()
     {
+    	// Get the default toolkit
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+		// Get the current screen size
+		Dimension scrnsize = toolkit.getScreenSize();
+		double width = (scrnsize.getWidth() / 2) - 150;
+		double height = (scrnsize.getHeight() / 2) - 150;
+		System.out.println(width);
+		System.out.println(height);
+
+    	
      this.setResizable(false);
-	this.setLocationRelativeTo(null);
-	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	this.setVisible(true);
+     this.setLocation((int)width,(int)height);
+	 //this.setLocationRelativeTo(null);
+	 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	 this.setVisible(true);
      this.setLayout(new GridLayout(5,5));
     
      //listener object
