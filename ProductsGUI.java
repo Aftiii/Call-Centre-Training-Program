@@ -117,7 +117,7 @@ public class ProductsGUI extends JFrame
                 }
                 if (e.getActionCommand().equals("Customer Details")) {
                     cdgui = new CustDetailsGUI();
-			    	cdgui.pack();
+			    	cdgui.createAndShowGUI();
 
                     dispose();
                 }
