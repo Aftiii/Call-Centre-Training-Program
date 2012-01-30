@@ -119,7 +119,7 @@ public class ProblemsGUI extends JFrame
                 }
                 if (e.getActionCommand().equals("Customer Details")) {
                     cdgui = new CustDetailsGUI();
-			    	cdgui.pack();
+			    	cdgui.createAndShowGUI();
 
                     dispose();
                 }
